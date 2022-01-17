@@ -1,0 +1,22 @@
+[package]
+name = "datafusion-streams"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+datafusion = { path = "..\\arrow-datafusion\\datafusion" }
+rdkafka = { version = "0.28", features = ["cmake-build"] }
+tokio = { version = "1.15", features = ["time"] }
+futures = "0.3"
+async-trait = "0.1"
+arc-swap = "1.5"
+tokio-stream = "0.1"
+arrow = "6"
+log = "0.4"
+
+[dev-dependencies]
+env_logger = "0.9.0"
+rand = "0.8.4"
+regex = "1.5.4"
+tokio = "1.15.0"
+chrono = "0.4.19"
