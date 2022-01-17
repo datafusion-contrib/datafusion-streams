@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-datafusion = { path = "..\\arrow-datafusion\\datafusion" }
+datafusion = { path = "..\\arrow-datafusion\\datafusion", commit = "streams" }
 rdkafka = { version = "0.28", features = ["cmake-build"] }
 tokio = { version = "1.15", features = ["time"] }
 futures = "0.3"
