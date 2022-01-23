@@ -4,14 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-datafusion = { path = "..\\arrow-datafusion\\datafusion", commit = "streams" }
+datafusion = { path = "../arrow-datafusion/datafusion", features = ["avro"] }
 rdkafka = { version = "0.28", features = ["cmake-build"] }
 tokio = { version = "1.15", features = ["time"] }
 futures = "0.3"
 async-trait = "0.1"
 arc-swap = "1.5"
 tokio-stream = "0.1"
-arrow = "6"
+arrow = "7"
 log = "0.4"
 
 [dev-dependencies]

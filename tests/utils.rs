@@ -4,12 +4,10 @@ use std::collections::HashMap;
 use std::env::{self, VarError};
 use std::io::Write;
 
-
 use chrono::prelude::*;
 use env_logger::fmt::Formatter;
 
 use std::time::Duration;
-
 
 use env_logger::Builder;
 
@@ -27,9 +25,13 @@ use rdkafka::statistics::Statistics;
 use rdkafka::TopicPartitionList;
 use regex::Regex;
 
+/// Taken from https://github.com/fede1024/rust-rdkafka/blob/master/tests/utils.rs with some slight modifications and updates
+/// credit to rdkafka
+
 pub fn rand_test_topic() -> String {
     let mut trng = rand::thread_rng();
-    let id = std::iter::repeat(()).map(|()| trng.sample(Alphanumeric))
+    let id = std::iter::repeat(())
+        .map(|()| trng.sample(Alphanumeric))
         .map(char::from)
         .take(10)
         .collect::<String>();
@@ -38,7 +40,8 @@ pub fn rand_test_topic() -> String {
 
 pub fn rand_test_group() -> String {
     let mut trng = rand::thread_rng();
-    let id = std::iter::repeat(()).map(|()| trng.sample(Alphanumeric))
+    let id = std::iter::repeat(())
+        .map(|()| trng.sample(Alphanumeric))
         .map(char::from)
         .take(10)
         .collect::<String>();
@@ -47,7 +50,8 @@ pub fn rand_test_group() -> String {
 
 pub fn rand_test_transactional_id() -> String {
     let mut trng = rand::thread_rng();
-    let id = std::iter::repeat(()).map(|()| trng.sample(Alphanumeric))
+    let id = std::iter::repeat(())
+        .map(|()| trng.sample(Alphanumeric))
         .map(char::from)
         .take(10)
         .collect::<String>();
@@ -81,7 +85,7 @@ pub fn get_broker_version() -> KafkaVersion {
         }
         // If the environment variable is unset, assume we're running the latest version.
         Err(VarError::NotPresent) => {
-            KafkaVersion(std::u32::MAX, std::u32::MAX, std::u32::MAX, std::u32::MAX)
+            KafkaVersion(u32::MAX, u32::MAX, u32::MAX, u32::MAX)
         }
     }
 }
@@ -99,7 +103,10 @@ impl ClientContext for ProducerTestContext {
 
 pub async fn create_topic(name: &str, partitions: i32) {
     let client: AdminClient<_> = consumer_config("create_topic", None)
-        .into_iter().collect::<ClientConfig>().create().unwrap();
+        .into_iter()
+        .collect::<ClientConfig>()
+        .create()
+        .unwrap();
     client
         .create_topics(
             &[NewTopic::new(name, partitions, TopicReplication::Fixed(1))],
@@ -112,7 +119,10 @@ pub async fn create_topic(name: &str, partitions: i32) {
 pub fn setup_logger(log_thread: bool, rust_log: Option<&str>) {
     let output_format = move |formatter: &mut Formatter, record: &Record| {
         let thread_name = if log_thread {
-            format!("(t: {}) ", std::thread::current().name().unwrap_or("unknown"))
+            format!(
+                "(t: {}) ",
+                std::thread::current().name().unwrap_or("unknown")
+            )
         } else {
             "".to_string()
         };
@@ -151,11 +161,11 @@ pub async fn populate_topic<P, K, J, Q>(
     partition: Option<i32>,
     timestamp: Option<i64>,
 ) -> HashMap<(i32, i64), i32>
-    where
-        P: Fn(i32) -> J,
-        K: Fn(i32) -> Q,
-        J: ToBytes,
-        Q: ToBytes,
+where
+    P: Fn(i32) -> J,
+    K: Fn(i32) -> Q,
+    J: ToBytes,
+    Q: ToBytes,
 {
     let prod_context = ProducerTestContext { _some_data: 1234 };
 
